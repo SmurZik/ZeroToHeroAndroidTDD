@@ -62,6 +62,7 @@ class Task023Test {
         onView(withId(R.id.actionButton)).perform(click())
         onView(withId(R.id.inputEditText)).check(matches(withText("")))
 
+
         onView(RecyclerViewMatcher(R.id.recyclerView).atPosition(0, R.id.elementTextView))
             .check(matches(withText("first text")))
 

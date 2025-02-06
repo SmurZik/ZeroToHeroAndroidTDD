@@ -1,10 +1,13 @@
 package ru.easycode.zerotoheroandroidtdd
 
+import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.core.view.children
 import androidx.recyclerview.widget.RecyclerView
+import java.util.ArrayList
 
 class TextAdapter : RecyclerView.Adapter<TextViewHolder>() {
 
@@ -20,15 +23,19 @@ class TextAdapter : RecyclerView.Adapter<TextViewHolder>() {
         holder.bind(list[position])
     }
 
-    fun restore(source: List<String>) {
+    fun save(bundle: Bundle) {
+        bundle.putStringArrayList("key", ArrayList(list))
+    }
+
+    fun restore(bundle: Bundle) {
         list.clear()
-        list.addAll(source)
-        notifyDataSetChanged()
+        list.addAll(bundle.getStringArrayList("key")?.toMutableList() ?: mutableListOf())
+        notifyItemRangeInserted(0, list.size)
     }
 
     fun map(source: String) {
         list.add(source)
-        notifyDataSetChanged()
+        notifyItemInserted(list.size - 1)
     }
 
 }

@@ -116,6 +116,7 @@ private interface FakeProvideViewModel : ProvideViewModel {
 
         override fun <T : ViewModel> viewModel(viewModelClass: Class<T>): T {
             list.add(viewModelClass)
+            println("fake")
             return viewModelClass.getDeclaredConstructor().newInstance()
         }
     }

@@ -5,12 +5,27 @@ import androidx.fragment.app.FragmentManager
 
 interface Screen {
 
+    object Pop : Screen {
+        override fun show(supportFragmentManager: FragmentManager, containerId: Int) {
+            supportFragmentManager.popBackStack()
+        }
+    }
+
     fun show(supportFragmentManager: FragmentManager, containerId: Int)
 
     abstract class Replace(private val fragmentClass: Class<out Fragment>) : Screen {
         override fun show(supportFragmentManager: FragmentManager, containerId: Int) {
             supportFragmentManager.beginTransaction()
                 .replace(containerId, fragmentClass.getDeclaredConstructor().newInstance())
+                .commit()
+        }
+    }
+
+    abstract class Add(private val fragmentClass: Class<out Fragment>) : Screen {
+        override fun show(supportFragmentManager: FragmentManager, containerId: Int) {
+            supportFragmentManager.beginTransaction()
+                .replace(containerId, fragmentClass.getDeclaredConstructor().newInstance())
+                .addToBackStack(fragmentClass.name)
                 .commit()
         }
     }

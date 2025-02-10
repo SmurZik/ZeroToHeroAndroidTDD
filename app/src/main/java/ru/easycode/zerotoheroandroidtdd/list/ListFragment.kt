@@ -10,16 +10,34 @@ import ru.easycode.zerotoheroandroidtdd.databinding.ListLayoutBinding
 
 class ListFragment : AbstractFragment<ListLayoutBinding>() {
 
+    private lateinit var viewModel: ListViewModel
+
     override fun bind(inflater: LayoutInflater, container: ViewGroup?): ListLayoutBinding {
         return ListLayoutBinding.inflate(inflater, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val viewModel = (activity as ProvideViewModel).viewModel(ListViewModel::class.java)
+        viewModel = (activity as ProvideViewModel).viewModel(ListViewModel::class.java)
+
+        val adapter = ListAdapter()
+        binding.recyclerView.adapter = adapter
 
         binding.addButton.setOnClickListener {
             viewModel.create()
         }
+
+        viewModel.liveData().observe(viewLifecycleOwner) {
+            adapter.update(it)
+        }
+
+        savedInstanceState?.let {
+            viewModel.restore(BundleWrapper.Base(it))
+        }
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        viewModel.save(BundleWrapper.Base(outState))
     }
 }

@@ -14,4 +14,12 @@ class ListViewModel(
     fun create() {
         navigation.update(CreateScreen)
     }
+
+    fun save(bundleWrapper: BundleWrapper.Save) {
+        liveDataWrapper.save(bundleWrapper)
+    }
+
+    fun restore(bundleWrapper: BundleWrapper.Restore) {
+        liveDataWrapper.update(bundleWrapper.restore())
+    }
 }
